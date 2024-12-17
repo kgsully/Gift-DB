@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: api
+  datasource:
+    url: jdbc:sqlite:db/gift.db
+    driver-class-name: org.sqlite.JDBC
+  flyway:
+    enabled: true
+    locations: db/migration
+    validate-on-migrate: true
+    baseline-on-migrate: true
+    baseline-version: 1
+
