@@ -1,5 +1,6 @@
 package com.Gift_DB.api.service;
 
+import com.Gift_DB.api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<Map<String, Object>> getUserByUserName(String userName) {
+    public User getUserByUserName(String userName) {
         return userRepository.getUserByUserName(userName);
     }
 

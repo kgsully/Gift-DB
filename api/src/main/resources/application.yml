@@ -11,3 +11,7 @@ spring:
     baseline-on-migrate: true
     baseline-version: 1
 
+server:
+  port: 8080
+  servlet:
+    context-path: /api
