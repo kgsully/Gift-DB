@@ -1,4 +1,4 @@
-package com.Gift_DB.api.model;
+package com.Gift_DB.api.dto;
 
 //import java.time.LocalDateTime;
 

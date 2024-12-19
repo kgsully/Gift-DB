@@ -1,6 +1,6 @@
 package com.Gift_DB.api.repository;
 
-import com.Gift_DB.api.model.User;
+import com.Gift_DB.api.dto.User;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
