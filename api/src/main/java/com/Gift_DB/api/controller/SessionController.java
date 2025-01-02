@@ -1,17 +1,11 @@
 package com.Gift_DB.api.controller;
 
-import com.Gift_DB.api.dto.User;
 import com.Gift_DB.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,9 +24,20 @@ public class SessionController {
         String credential = req.get("credential");
         String password = req.get("password");
 
-        // TODO Call method to set token cookie to send to client upon successful authentication
+        try {
+            // TODO Call method to set token cookie to send to client upon successful authentication
+            Map<String, Object> loginResponse = userService.login(credential, password);
+            if (loginResponse.containsKey("id")) {
+                return new ResponseEntity<>(loginResponse, HttpStatus.OK);
+            } else {
+                // This else block will trigger if the user is found within the database, but
+                // the login credentials are incorrect - UNAUTHORIZED
+                return new ResponseEntity<>(loginResponse, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            // This catch block will trigger if the user is not found within the database - BAD REQUEST
+            return new ResponseEntity<>(userService.generateLoginError(credential, password), HttpStatus.BAD_REQUEST);
 
-        return userService.login(credential, password);
+        }
     }
-
 }

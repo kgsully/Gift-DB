@@ -2,8 +2,6 @@ package com.Gift_DB.api.service;
 
 import com.Gift_DB.api.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,20 +22,19 @@ public class UserService {
     // Login Method:
     // Responsible for calling methods to query the DB for a user with the provided credentials and validating
     // the credentials if a user is found. Returns a ResponseEntity to be used by the controller.
-    public ResponseEntity<?> login(String credential, String password) {
+    public Map<String, Object> login(String credential, String password) {
 
-        try {
-            User user = userRepository.getUserLogin(credential);
-            if (validatePassword(password, user.getHashedPassword())) {
-                // Return the 'Current User' scope as a hashmap. Note that the 'Current User'
-                // includes all fields EXCEPT for the hashed password.
-                return new ResponseEntity<>(toCurrentUser(user), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(generateLoginError(credential, password), HttpStatus.BAD_REQUEST);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(generateLoginError(credential, password), HttpStatus.UNAUTHORIZED);
+        User user = userRepository.getUserLogin(credential);
+        if (validatePassword(password, user.getHashedPassword())) {
+            // Return the 'Current User' scope as a hashmap. Note that the 'Current User'
+            // includes all fields EXCEPT for the hashed password.
+            return toCurrentUser(user);
+        } else {
+            // This else block will trigger if the user is found within the database, but
+            // the login credentials are incorrect - UNAUTHORIZED
+            return generateLoginError(credential, password);
         }
+
     }
 
     // Method to user the Bcrypt library to validate the user provided password matches
@@ -51,7 +48,7 @@ public class UserService {
     // If the user provides a blank / empty username/email or password, respond as such,
     // otherwise the failure is due to either the user is not found in the DB (SQLException) or
     // the password doesn't match the DB record - if this is the case, provide a generic invalid credentials message.
-    private Map<String, Object> generateLoginError(String credential, String password) {
+    public Map<String, Object> generateLoginError(String credential, String password) {
         Map<String, Object> msg = new HashMap<String, Object>();
         List<String> errors = new ArrayList<String>();
 
