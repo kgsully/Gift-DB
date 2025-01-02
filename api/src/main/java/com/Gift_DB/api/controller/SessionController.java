@@ -18,7 +18,6 @@ public class SessionController {
     // Calls the login method from the user service (which returns a ResponseEntity which may contain a
     // hashmap with user information, or an error. Sets the token cookie for the session, and returns the user info
     // in the event of a successful login.
-    // TODO - Look at refactoring such that the ResponseEntity is generated here instead of the service
     @PostMapping("/session")
     public ResponseEntity<?> login(@RequestBody Map<String, String> req) {
         String credential = req.get("credential");

@@ -18,7 +18,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // TODO - Look at refactoring the login method so as not to return a response entity
     // Login Method:
     // Responsible for calling methods to query the DB for a user with the provided credentials and validating
     // the credentials if a user is found. Returns a ResponseEntity to be used by the controller.
