@@ -76,6 +76,7 @@ public class UserService {
         return msg;
     }
 
+    // Code using User class object
     // Create and return a hashmap from the passed in user to be used in the ResponseEntity for a successful login.
     // This prevents the hashed password from being sent back and being present on the frontend.
     // private Map<String, Object> toCurrentUser(User user) {
@@ -88,14 +89,24 @@ public class UserService {
     //
     //     return currentUser;
     // }
+
     private Map<String, Object> toCurrentUser(Map<String, Object> user) {
         Map<String, Object> currentUser = new HashMap<>();
         currentUser.put("id", user.get("id"));
-        currentUser.put("username", user.get("userName"));
+        currentUser.put("userName", user.get("userName"));
         currentUser.put("email", user.get("email"));
         currentUser.put("createdAt", user.get("createdAt"));
         currentUser.put("updatedAt", user.get("updatedAt"));
 
         return currentUser;
+    }
+
+    public Map<String, Object> toSafeObject(Map<String, Object> currentUser) {
+        Map<String, Object> safeObject = new HashMap<>();
+        safeObject.put("id", currentUser.get("id"));
+        safeObject.put("userName", currentUser.get("userName"));
+        safeObject.put("email", currentUser.get("email"));
+
+        return safeObject;
     }
 }

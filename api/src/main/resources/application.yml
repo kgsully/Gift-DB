@@ -4,7 +4,9 @@ spring:
   config:
     import:
       optional:./secrets.properties
-      # Contains property 'jwt.secrets' environment variable
+      # Contains the following environment variables:
+      #   jwt.secret
+      #   jwt.expirationTimeInMinutes
   datasource:
     url: jdbc:sqlite:db/gift.db
     driver-class-name: org.sqlite.JDBC

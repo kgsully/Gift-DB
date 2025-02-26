@@ -21,6 +21,7 @@ public class UserRepository {
     // @Autowired
     // private JdbcTemplate jdbcTemplate;
 
+    // Code using User class object
     // public User getUserLogin(String credential) {
     //     String query = "SELECT * FROM users "
     //                  + "WHERE username = ? OR email = ?";
