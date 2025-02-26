@@ -1,6 +1,10 @@
 spring:
   application:
     name: api
+  config:
+    import:
+      optional:./secrets.properties
+      # Contains property 'jwt.secrets' environment variable
   datasource:
     url: jdbc:sqlite:db/gift.db
     driver-class-name: org.sqlite.JDBC
@@ -12,6 +16,6 @@ spring:
     baseline-version: 1
 
 server:
-  port: 8080
+  port: 5000
   servlet:
     context-path: /api

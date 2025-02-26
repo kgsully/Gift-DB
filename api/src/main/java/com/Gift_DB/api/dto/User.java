@@ -29,6 +29,11 @@ public class User {
     //     this.createdAt = LocalDateTime.now();
     //     this.updatedAt = LocalDateTime.now();
     // }
+    //
+    // // Blank constructor for generating an 'empty' user to return in the event that a user is not found in the DB
+    // public User() {
+    //     this(0, "", "", "", null, null);
+    // }
 
     public int getId() {
         return this.id;

@@ -1,22 +1,33 @@
 package com.Gift_DB.api.controller;
 
 import com.Gift_DB.api.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.core.env.Environment;
 
 import java.util.Map;
 
 @RestController
 public class SessionController {
 
-    @Autowired
-    private UserService userService;
+    // Using constructor injection instead of @Autowired
+    private final UserService userService;
+    private final Environment env;
+
+    public SessionController(UserService userService, Environment env) {
+        this.userService = userService;
+        this.env = env;
+    }
+
+    // @Autowired
+    // private UserService userService;
+    // private Environment env;
 
     // Login Route:
     // Calls the login method from the user service (which returns a ResponseEntity which may contain a
-    // hashmap with user information, or an error. Sets the token cookie for the session, and returns the user info
+    // hashmap with user information, or an error). Sets the token cookie for the session, and returns the user info
     // in the event of a successful login.
     @PostMapping("/session")
     public ResponseEntity<?> login(@RequestBody Map<String, String> req) {

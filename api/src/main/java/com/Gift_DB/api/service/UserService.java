@@ -1,7 +1,7 @@
 package com.Gift_DB.api.service;
 
-import com.Gift_DB.api.dto.User;
-import org.springframework.beans.factory.annotation.Autowired;
+// import com.Gift_DB.api.dto.User;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +15,25 @@ import java.util.Map;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    // Using constructor injection instead of @Autowired
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    // @Autowired
+    // private UserRepository userRepository;
 
     // Login Method:
     // Responsible for calling methods to query the DB for a user with the provided credentials and validating
     // the credentials if a user is found. Returns a ResponseEntity to be used by the controller.
     public Map<String, Object> login(String credential, String password) {
 
-        User user = userRepository.getUserLogin(credential);
-        if (validatePassword(password, user.getHashedPassword())) {
+        // User user = userRepository.getUserLogin(credential);
+        Map<String, Object> user = userRepository.getUserLogin(credential);
+        // if (validatePassword(password, user.getHashedPassword())) {
+        if (validatePassword(password, (String) user.get("hashedPassword"))) {
             // Return the 'Current User' scope as a hashmap. Note that the 'Current User'
             // includes all fields EXCEPT for the hashed password.
             return toCurrentUser(user);
@@ -69,13 +78,23 @@ public class UserService {
 
     // Create and return a hashmap from the passed in user to be used in the ResponseEntity for a successful login.
     // This prevents the hashed password from being sent back and being present on the frontend.
-    private Map<String, Object> toCurrentUser(User user) {
+    // private Map<String, Object> toCurrentUser(User user) {
+    //     Map<String, Object> currentUser = new HashMap<>();
+    //     currentUser.put("id", user.getId());
+    //     currentUser.put("username", user.getUsername());
+    //     currentUser.put("email", user.getEmail());
+    //     currentUser.put("createdAt", user.getCreatedAt());
+    //     currentUser.put("updatedAt", user.getUpdatedAt());
+    //
+    //     return currentUser;
+    // }
+    private Map<String, Object> toCurrentUser(Map<String, Object> user) {
         Map<String, Object> currentUser = new HashMap<>();
-        currentUser.put("id", user.getId());
-        currentUser.put("username", user.getUsername());
-        currentUser.put("email", user.getEmail());
-        currentUser.put("createdAt", user.getCreatedAt());
-        currentUser.put("updatedAt", user.getUpdatedAt());
+        currentUser.put("id", user.get("id"));
+        currentUser.put("username", user.get("userName"));
+        currentUser.put("email", user.get("email"));
+        currentUser.put("createdAt", user.get("createdAt"));
+        currentUser.put("updatedAt", user.get("updatedAt"));
 
         return currentUser;
     }
