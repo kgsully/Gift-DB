@@ -41,10 +41,13 @@ public class SessionController {
 
                 String jwt = jwtUtil.generateJwt(userService.toSafeObject(loginResponse));
 
+                Map<String, Object> user = new HashMap<>();
+                user.put("user", loginResponse);
+
                 // Attach cookie to response entity header upon successful authorization
                 return ResponseEntity.ok()
                         .header(HttpHeaders.SET_COOKIE, cookieUtil.generateSessionCookie(jwt).toString())
-                        .body(loginResponse);
+                        .body(user);
             } else {
                 // This else block will trigger if the user is found within the database, but
                 // the login credentials are incorrect - UNAUTHORIZED
@@ -76,13 +79,23 @@ public class SessionController {
     }
 
     // Get Session User Route:
-    //
+    // Uses UserService restoreUser and will return the session user as JSON
+    // If there is not a valid session (e.g. no JWT session cookie or expired JWT),
+    // it will clear session token and return a JSON with an empty object under the user key.
     @GetMapping("/session")
     public ResponseEntity<?> getUser(@CookieValue(value = "Session_Token", defaultValue = "none") String sessionToken) {
-        Map<String, Object> user = userService.restoreUser(sessionToken);
+        Map<String, Object> restoredUser = userService.restoreUser(sessionToken);
+        Map<String, Object> user = new HashMap<>();
+        user.put("user", restoredUser);
 
-        return ResponseEntity.ok()
-                .body(user);
+        if (restoredUser.containsKey("id")) {
+            return ResponseEntity.ok()
+                    .body(user);
+        } else {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteSessionCookie().toString())
+                    .body(user);
+        }
     }
 
 }

@@ -75,6 +75,16 @@ public class UserService {
         return msg;
     }
 
+    // restoreUser Method:
+    // Restore the session user based upon the contents of the JWT cookie.
+    // Certain authenticated routes will require the identity of the current session user.
+        // 1. Verifies and parses the JWT payload and searches the database for a User with the id in the payload
+        // 2. If there is an error verifying the JWT or a User cannot be found with the specified id,
+        //    clear the token cookie from the response.
+        // 3. If a user is found, save the user to a key of user onto the request.
+
+    // retrieves the user ID from a jwt passed into it, perform the DB query for the user ID,
+    // then return the user if a valid user is found to restore the session. Otherwise returns an empty map.
     public Map<String, Object> restoreUser (String jwt) {
         int userId = jwtUtil.validateJwt(jwt);
         try {
@@ -85,7 +95,8 @@ public class UserService {
         }
     }
 
-    // toCurrentUser generates and returns a hashmap of all user data EXCEPT the hashed password
+    // toCurrentUser Method:
+    // Generates and returns a hashmap of all user data EXCEPT the hashed password
     private Map<String, Object> toCurrentUser(Map<String, Object> user) {
         Map<String, Object> currentUser = new HashMap<>();
         currentUser.put("id", user.get("id"));
@@ -101,7 +112,8 @@ public class UserService {
         return currentUser;
     }
 
-    // toSafeObject generates and returns a hashmap of limited user data. Typical use - JWT creation
+    // toSafeObject Method:
+    // Generates and returns a hashmap of limited user data. Typical use - JWT creation
     public Map<String, Object> toSafeObject(Map<String, Object> currentUser) {
         Map<String, Object> safeObject = new HashMap<>();
         safeObject.put("id", currentUser.get("id"));

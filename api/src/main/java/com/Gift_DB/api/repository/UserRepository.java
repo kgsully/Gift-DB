@@ -15,6 +15,7 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // Perform DB queries based upon a passed in credential
     public Map<String, Object> getUserByCredential(String credential) {
         String query = "SELECT * FROM users "
                 + "WHERE (username = ? OR email = ?) AND (active = true)";
@@ -24,6 +25,7 @@ public class UserRepository {
         return jdbcTemplate.queryForMap(query, credential, credential);
     }
 
+    // Perform DB queries based upon a passed in user ID
     public Map<String, Object> getUserById(int userId) {
         String query = "SELECT * FROM users "
                 + "WHERE id = ? AND active = true";
