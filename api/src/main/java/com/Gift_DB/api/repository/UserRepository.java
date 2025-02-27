@@ -1,7 +1,5 @@
 package com.Gift_DB.api.repository;
 
-import com.Gift_DB.api.dto.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,22 +15,29 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Map<String, Object> getUserLogin(String credential) {
+    public Map<String, Object> getUserByCredential(String credential) {
         String query = "SELECT * FROM users "
-                + "WHERE username = ? OR email = ?";
+                + "WHERE (username = ? OR email = ?) AND (active = true)";
 
         // Expected result will be a single record as the username field has a unique constraint
-        // Could alternatively use the queryForMap to return a hashmap object
-        // without using a model.  ---> System.out.println(jdbcTemplate.queryForMap(query, new Object[] {userName}));
+        // Could alternatively use the queryForObject, specifying a row mapper
         return jdbcTemplate.queryForMap(query, credential, credential);
+    }
 
+    public Map<String, Object> getUserById(int userId) {
+        String query = "SELECT * FROM users "
+                + "WHERE id = ? AND active = true";
+
+        // Expected result will be a single record as the username field has a unique constraint
+        // Could alternatively use the queryForObject, specifying a row mapper
+        return jdbcTemplate.queryForMap(query, userId);
     }
 
 }
 
-
-
+// --------------------------------------------------------------------------------------------------------------------
 // Notes:
+// --------------------------------------------------------------------------------------------------------------------
 
 // getUserLogin method using the User class
 // public User getUserLogin(String credential) {
