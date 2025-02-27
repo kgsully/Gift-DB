@@ -17,22 +17,6 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // Attach the JdbcTemplate for use in querying the DB
-    // @Autowired
-    // private JdbcTemplate jdbcTemplate;
-
-    // Code using User class object
-    // public User getUserLogin(String credential) {
-    //     String query = "SELECT * FROM users "
-    //                  + "WHERE username = ? OR email = ?";
-    //
-    //     // Expected result will be a single record as the username field has a unique constraint
-    //     // Could alternatively use the queryForMap to return a hashmap object
-    //     // without using a model.  ---> System.out.println(jdbcTemplate.queryForMap(query, new Object[] {userName}));
-    //     return jdbcTemplate.queryForObject(query, new UserRowMapper(), credential, credential);
-    //
-    // }
-
     public Map<String, Object> getUserLogin(String credential) {
         String query = "SELECT * FROM users "
                 + "WHERE username = ? OR email = ?";
@@ -45,3 +29,18 @@ public class UserRepository {
     }
 
 }
+
+
+
+// Notes:
+
+// getUserLogin method using the User class
+// public User getUserLogin(String credential) {
+//     String query = "SELECT * FROM users "
+//                  + "WHERE username = ? OR email = ?";
+//
+//     // Expected result will be a single record as the username field has a unique constraint
+//     // Could alternatively use the queryForMap to return a hashmap object
+//     // without using a model.  ---> System.out.println(jdbcTemplate.queryForMap(query, new Object[] {userName}));
+//     return jdbcTemplate.queryForObject(query, new UserRowMapper(), credential, credential);
+// }

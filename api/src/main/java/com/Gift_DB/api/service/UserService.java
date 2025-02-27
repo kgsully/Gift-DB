@@ -22,9 +22,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // @Autowired
-    // private UserRepository userRepository;
-
     // Login Method:
     // Responsible for calling methods to query the DB for a user with the provided credentials and validating
     // the credentials if a user is found. Returns a ResponseEntity to be used by the controller.
@@ -42,7 +39,6 @@ public class UserService {
             // the login credentials are incorrect - UNAUTHORIZED
             return generateLoginError(credential, password);
         }
-
     }
 
     // Method to user the Bcrypt library to validate the user provided password matches
@@ -75,20 +71,6 @@ public class UserService {
         msg.put("errors", errors);
         return msg;
     }
-
-    // Code using User class object
-    // Create and return a hashmap from the passed in user to be used in the ResponseEntity for a successful login.
-    // This prevents the hashed password from being sent back and being present on the frontend.
-    // private Map<String, Object> toCurrentUser(User user) {
-    //     Map<String, Object> currentUser = new HashMap<>();
-    //     currentUser.put("id", user.getId());
-    //     currentUser.put("username", user.getUsername());
-    //     currentUser.put("email", user.getEmail());
-    //     currentUser.put("createdAt", user.getCreatedAt());
-    //     currentUser.put("updatedAt", user.getUpdatedAt());
-    //
-    //     return currentUser;
-    // }
 
     private Map<String, Object> toCurrentUser(Map<String, Object> user) {
         Map<String, Object> currentUser = new HashMap<>();
