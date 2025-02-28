@@ -35,33 +35,31 @@ public class SessionController {
         String credential = req.get("credential");
         String password = req.get("password");
 
-        try {
-            Map<String, Object> loginResponse = userService.login(credential, password);
-            if (loginResponse.containsKey("id")) {
 
-                String jwt = jwtUtil.generateJwt(userService.toSafeObject(loginResponse));
+        Map<String, Object> loginResponse = userService.login(credential, password);
+        if (loginResponse.containsKey("id")) {
 
-                Map<String, Object> user = new HashMap<>();
-                user.put("user", loginResponse);
+            String jwt = jwtUtil.generateJwt(userService.toSafeObject(loginResponse));
 
-                // Attach cookie to response entity header upon successful authorization
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.SET_COOKIE, cookieUtil.generateSessionCookie(jwt).toString())
-                        .body(user);
-            } else {
-                // This else block will trigger if the user is found within the database, but
-                // the login credentials are incorrect - UNAUTHORIZED
-                // Remove any JWT cookie present
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            Map<String, Object> user = new HashMap<>();
+            user.put("user", loginResponse);
+
+            // Attach cookie to response entity header upon successful authorization
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookieUtil.generateSessionCookie(jwt).toString())
+                    .body(user);
+        } else {
+            return switch ((int) loginResponse.get("status")) {
+                case 400 -> ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteSessionCookie().toString())
+                        .body(userService.generateLoginError(credential, password, 400));
+                case 401 -> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteSessionCookie().toString())
                         .body(loginResponse);
-            }
-        } catch (Exception e) {
-            // This catch block will trigger if the user is not found within the database - BAD REQUEST
-            // Remove any JWT cookie present
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteSessionCookie().toString())
-                    .body(userService.generateLoginError(credential, password));
+                default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .header(HttpHeaders.SET_COOKIE, cookieUtil.deleteSessionCookie().toString())
+                        .body("Internal Server Error");
+            };
         }
     }
 
