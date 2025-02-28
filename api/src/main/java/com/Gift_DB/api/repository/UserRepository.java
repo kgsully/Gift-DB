@@ -35,6 +35,16 @@ public class UserRepository {
         return jdbcTemplate.queryForMap(query, userId);
     }
 
+    // Perform DB queries based upon a passed in user ID
+    public Map<String, Object> getCurrentUserById(int userId) {
+        String query = "SELECT id, userName, email, accountAdmin, linkedTo, active, name FROM users"
+                + "WHERE id = ? AND active = true";
+
+        // Expected result will be a single record as the username field has a unique constraint
+        // Could alternatively use the queryForObject, specifying a row mapper
+        return jdbcTemplate.queryForMap(query, userId);
+    }
+
 }
 
 // --------------------------------------------------------------------------------------------------------------------

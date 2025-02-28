@@ -35,7 +35,7 @@ public class UserService {
             if (validatePassword(password, (String) user.get("hashedPassword"))) {
                 // Return the 'Current User' scope as a hashmap. Note that the 'Current User'
                 // includes all fields EXCEPT for the hashed password.
-                return toCurrentUser(user);
+                return userRepository.getCurrentUserById((int) user.get("id"));
             } else {
                 // This else block will trigger if the user is found within the database, but
                 // the login credentials are incorrect - UNAUTHORIZED
@@ -93,27 +93,10 @@ public class UserService {
         int userId = jwtUtil.validateJwt(jwt);
         try {
             Map<String, Object> user = userRepository.getUserById(userId);
-            return toCurrentUser(user);
+            return userRepository.getCurrentUserById((int) user.get("id"));
         } catch (EmptyResultDataAccessException e) {
             return new HashMap<>();
         }
-    }
-
-    // toCurrentUser Method:
-    // Generates and returns a hashmap of all user data EXCEPT the hashed password
-    private Map<String, Object> toCurrentUser(Map<String, Object> user) {
-        Map<String, Object> currentUser = new HashMap<>();
-        currentUser.put("id", user.get("id"));
-        currentUser.put("userName", user.get("userName"));
-        currentUser.put("email", user.get("email"));
-        currentUser.put("accountAdmin", user.get("accountAdmin"));
-        currentUser.put("linkedTo", user.get("linkedTo"));
-        currentUser.put("active", user.get("active"));
-        currentUser.put("name", user.get("name"));
-        currentUser.put("createdAt", user.get("createdAt"));
-        currentUser.put("updatedAt", user.get("updatedAt"));
-
-        return currentUser;
     }
 
     // toSafeObject Method:
@@ -128,3 +111,24 @@ public class UserService {
     }
 
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+// Notes:
+// --------------------------------------------------------------------------------------------------------------------
+
+// toCurrentUser Method:
+// Generates and returns a hashmap of all user data EXCEPT the hashed password
+// private Map<String, Object> toCurrentUser(Map<String, Object> user) {
+//     Map<String, Object> currentUser = new HashMap<>();
+//     currentUser.put("id", user.get("id"));
+//     currentUser.put("userName", user.get("userName"));
+//     currentUser.put("email", user.get("email"));
+//     currentUser.put("accountAdmin", user.get("accountAdmin"));
+//     currentUser.put("linkedTo", user.get("linkedTo"));
+//     currentUser.put("active", user.get("active"));
+//     currentUser.put("name", user.get("name"));
+//     currentUser.put("createdAt", user.get("createdAt"));
+//     currentUser.put("updatedAt", user.get("updatedAt"));
+//
+//     return currentUser;
+// }

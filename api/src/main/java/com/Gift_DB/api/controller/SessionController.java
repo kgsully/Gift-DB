@@ -38,7 +38,6 @@ public class SessionController {
 
         Map<String, Object> loginResponse = userService.login(credential, password);
         if (loginResponse.containsKey("id")) {
-
             String jwt = jwtUtil.generateJwt(userService.toSafeObject(loginResponse));
 
             Map<String, Object> user = new HashMap<>();
