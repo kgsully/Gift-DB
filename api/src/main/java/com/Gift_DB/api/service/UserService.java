@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.Gift_DB.api.util.JwtUtil;
 import com.Gift_DB.api.repository.UserRepository;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

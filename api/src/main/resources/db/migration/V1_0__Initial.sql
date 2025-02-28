@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
     updatedAt DATE NOT NULL
     );
 
+-- Add some test users for development purposes. Note that the hashed password for both of these test users
+-- is 'password'
 INSERT INTO users (username, email, hashedPassword, accountAdmin, linkedTo, active, name, createdAt, updatedAt)
   VALUES ('admin',
           'admin@test.com',
@@ -34,3 +36,4 @@ INSERT INTO users (username, email, hashedPassword, accountAdmin, linkedTo, acti
            '2024-12-17T18:17:51Z',
            '2024-12-17T18:17:51Z'
            );
+
